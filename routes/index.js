@@ -30,3 +30,9 @@ const mountRoutes = (app) => {
 };
 
 module.exports = mountRoutes;
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200 
+};
+
+app.use(cors(corsOptions));
