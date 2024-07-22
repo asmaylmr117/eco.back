@@ -7,6 +7,7 @@ const cors = require('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
+const mongoose = require('mongoose');
 
 dotenv.config({ path: 'config.env' });
 const ApiError = require('./utils/apiError');
@@ -19,13 +20,14 @@ const { webhookCheckout } = require('./services/orderService');
 // Connect with db
 dbConnection();
 
+// Update Mongoose to use the updated version's features
+mongoose.set('strictQuery', true);
+
 // express app
 const app = express();
 
 // Enable other domains to access your application
-
 const corsOptions = {
- 
   origin: 'https://eco-front-brown.vercel.app',
   optionsSuccessStatus: 200 
 };
@@ -48,10 +50,10 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  console.log(`mode: ${process.env.NODE_ENV}`);
+  console.log(mode: ${process.env.NODE_ENV});
 }
 
-// Limit each IP to 100 requests per `window` (here, per 15 minutes)
+// Limit each IP to 100 requests per window (here, per 15 minutes)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
@@ -79,7 +81,7 @@ app.use(
 mountRoutes(app);
 
 app.all('*', (req, res, next) => {
-  next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
+  next(new ApiError(Can't find this route: ${req.originalUrl}, 400));
 });
 
 // Global error handling middleware for express
@@ -87,14 +89,14 @@ app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {
-  console.log(`App running running on port ${PORT}`);
+  console.log(App running running on port ${PORT});
 });
 
 // Handle rejection outside express
 process.on('unhandledRejection', (err) => {
-  console.error(`UnhandledRejection Errors: ${err.name} | ${err.message}`);
+  console.error(UnhandledRejection Errors: ${err.name} | ${err.message});
   server.close(() => {
-    console.error(`Shutting down....`);
+    console.error(Shutting down....);
     process.exit(1);
   });
 });
