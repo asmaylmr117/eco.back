@@ -1,24 +1,27 @@
 const path = require('path');
-
-const express = require('express');
-const dotenv = require('dotenv');
+const express = require ('express');
 const morgan = require('morgan');
-const cors = require('cors');
+const cors = require ('cors');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
-const hpp = require('hpp');
-const mongoose = require('mongoose');
+const hpp = require ('hpp');
+const mongoose = require ('mongoose');
 
-dotenv.config({ path: 'config.env' });
-const ApiError = require('./utils/apiError');
+const ApiError = require ('./utils/apiError');
 const globalError = require('./middlewares/errorMiddleware');
 const dbConnection = require('./config/database');
 // Routes
 const mountRoutes = require('./routes');
 const { webhookCheckout } = require('./services/orderService');
 
+// MongoDB connection string
+const DB_URI = 'mongodb+srv://hussin74:hh01027804627hh@cluster0.bprakii.mongodb.net/udemy-ecommerce?retryWrites=true&w=majority&appName=Cluster0';
+
 // Connect with db
-dbConnection();
+mongoose.connect(DB_URI)
+ 
+  .then(() => console.log('DB connection successful'))
+  .catch((err) => console.error('DB connection error:', err));
 
 // Update Mongoose to use the updated version's features
 mongoose.set('strictQuery', true);
@@ -48,9 +51,12 @@ app.post(
 app.use(express.json({ limit: '20kb' }));
 app.use(express.static(path.join(__dirname, 'uploads')));
 
-if (process.env.NODE_ENV === 'development') {
+// Determine the environment
+const NODE_ENV = 'development'; // or 'production' based on your deployment
+
+if (NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  console.log(`mode: ${process.env.NODE_ENV}`);
+  console.log(`mode: ${NODE_ENV}`);
 }
 
 // Limit each IP to 100 requests per window (here, per 15 minutes)
