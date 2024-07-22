@@ -81,7 +81,7 @@ app.use(
 mountRoutes(app);
 
 app.all('*', (req, res, next) => {
-  next(new ApiError(Can't find this route: ${req.originalUrl}, 400));
+  next(new ApiError(`Can't find this route: ${req.originalUrl}`, 400));
 });
 
 // Global error handling middleware for express
@@ -89,14 +89,14 @@ app.use(globalError);
 
 const PORT = process.env.PORT || 8000;
 const server = app.listen(PORT, () => {
-  console.log(App running running on port ${PORT});
+  console.log(`App running running on port ${PORT}`);
 });
 
 // Handle rejection outside express
 process.on('unhandledRejection', (err) => {
-  console.error(UnhandledRejection Errors: ${err.name} | ${err.message});
+  console.error(`UnhandledRejection Errors: ${err.name} | ${err.message}`);
   server.close(() => {
-    console.error(Shutting down....);
+    console.error(`Shutting down....`);
     process.exit(1);
   });
 });
