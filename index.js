@@ -32,7 +32,7 @@ const app = express();
 
 // Enable other domains to access your application
 const corsOptions = {
-  origin: 'https://eco-front-brown.vercel.app',
+  origin: '*',
   optionsSuccessStatus: 200 
 };
 
