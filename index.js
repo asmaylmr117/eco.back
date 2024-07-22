@@ -50,7 +50,7 @@ app.use(express.static(path.join(__dirname, 'uploads')));
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-  console.log(mode: ${process.env.NODE_ENV});
+  console.log(`mode: ${process.env.NODE_ENV}`);
 }
 
 // Limit each IP to 100 requests per window (here, per 15 minutes)
